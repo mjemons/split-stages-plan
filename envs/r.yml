@@ -1,0 +1,15 @@
+---
+name: r_conda
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-base=4.5.3=h15dba0b_1
+  - python=3.9
+  - bioconductor-dropletutils
+  - bioconductor-geoquery
+  - bioconductor-singlecellmultimodal
+  - bioconductor-tenxbraindata
+  - bioconductor-zellkonverter
+  - r-argparse
+  - r-stringr
