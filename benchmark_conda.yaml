@@ -36,22 +36,21 @@ stages:
         parameters:
           - dataset_name: ["sc-mix"]
 
-#  - id: 2-filter
-#    inputs:
-#        - 1-data.matrix
-#        - 1-data.true_labels
-#    outputs:
-#      - id: 2-filter.cellids
-#        path: "{dataset}_cellids.txt.gz"
-#    modules:
-#      - id: filter_method_1
-#        name: "the only method you will ever need"
-#        software_environment: "apptainer_env"
-#        repository:
-#          url: https://github.com/CHANGEME/my_method
-#          commit: deadbeef
-#        parameters:
-#          - param1: "value"
+  - id: 2-filter
+    inputs:
+        - 1-data.h5ad
+    outputs:
+      - id: 2-filter.cellids
+        path: "{dataset}_cellids.txt.gz"
+    modules:
+      - id: filter_method_1
+        name: "the only method you will ever need"
+        software_environment: "apptainer_env"
+        repository:
+          url: https://github.com/scrna-bench/2-filter
+          commit: deadbeef
+        parameters:
+          - type: ["auto", "manual"]
 
 #  - id: 3-normalize
 #    inputs:
