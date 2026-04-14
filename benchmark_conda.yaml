@@ -20,11 +20,11 @@ software_environments:
 stages:
   - id: 1-data
     outputs:
-      - id: 1-data.h5ad
+      - id: rawdata.h5ad
         path: "{dataset}.h5ad"
-      - id: 1-data.clusters_truth
+      - id: rawdata.clusters_truth
         path: "{dataset}.clusters_truth.tsv"
-      - id: 1-data.clusters_truth_num
+      - id: rawdata.clusters_truth_num
         path: "{dataset}.clusters_truth_num.txt"
     modules:
       - id: datasets
@@ -38,19 +38,19 @@ stages:
 
   - id: 2-filter
     inputs:
-        - 1-data.h5ad
+        - rawdata.h5ad
     outputs:
-      - id: 2-filter.cellids
+      - id: filter.cellids
         path: "{dataset}_cellids.txt.gz"
     modules:
-      - id: filter_method_1
-        name: "the only method you will ever need"
-        software_environment: "apptainer_env"
+      - id: filtering
+        name: "Implement cell filters"
+        software_environment: "r_conda"
         repository:
           url: https://github.com/scrna-bench/2-filter
-          commit: deadbeef
+          commit: "a191766"
         parameters:
-          - type: ["auto", "manual"]
+          - filter_type: ["manual", "scrapper-auto"]
 
 #  - id: 3-normalize
 #    inputs:
