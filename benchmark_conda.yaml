@@ -72,7 +72,6 @@ stages:
   - id: 4-select
     inputs:
         - normalized.h5
-        - filtered.cellids
     outputs:
       - id: selected.genes
         path: "{dataset}_selected.txt.gz"
