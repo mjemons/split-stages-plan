@@ -58,14 +58,14 @@ stages:
         - filter.cellids
     outputs:
       - id: normalized.h5ad
-        path: "{dataset}_normalized.txt.gz"
+        path: "{dataset}_normalized.mtx.gz"
     modules:
       - id: normalization-r
         name: "R-based scRNA-seq normalization methods"
         software_environment: "r_conda"
         repository:
           url: https://github.com/scrna-bench/3-normalize
-          commit: 1c54ae8
+          commit: "769865c"
         parameters:
           - normalization_type: ["seurat_log1pCP10k", "scuttle_geometricSizeFactors"]
 
