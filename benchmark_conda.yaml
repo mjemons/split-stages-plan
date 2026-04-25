@@ -18,7 +18,7 @@ software_environments:
         conda: envs/r.yml
 
 stages:
-  - id: 1-data
+  - id: one-data
     outputs:
       - id: rawdata.h5ad
         path: "{dataset}.h5ad"
@@ -36,9 +36,9 @@ stages:
         parameters:
           - dataset_name: ["sc-mix"]
 
-  - id: 2-filter
+  - id: two-filter
     inputs:
-        - rawdata.h5ad
+      - rawdata.h5ad
     outputs:
       - id: filtered.cellids
         path: "{dataset}_cellids.txt.gz"
@@ -52,10 +52,10 @@ stages:
         parameters:
           - filter_type: ["manual", "scrapper-auto"]
 
-  - id: 3-normalize
+  - id: three-normalize
     inputs:
-        - rawdata.h5ad
-        - filtered.cellids
+      - rawdata.h5ad
+      - filtered.cellids
     outputs:
       - id: normalized.h5
         path: "{dataset}_normalized.h5"
@@ -69,9 +69,9 @@ stages:
         parameters:
           - normalization_type: ["seurat_log1pCP10k", "scuttle_geometricSizeFactors"]
 
-  - id: 4-select
+  - id: four-select
     inputs:
-        - normalized.h5
+      - normalized.h5
     outputs:
       - id: selected.genes
         path: "{dataset}_selected.txt.gz"
@@ -81,12 +81,12 @@ stages:
         software_environment: "r_conda"
         repository:
           url: https://github.com/scrna-bench/4-select
-          commit: "63531d9"
+          commit: "6cd1817"
         parameters:
           - selection_type: ["seurat_vst", "scrapper_modelGeneVariances"]
             number_selected: 2000
 
-#  - id: 5-pca
+#  - id: five-pca
 #    inputs:
 #        - 3-normalize.normalized
 #        - 4-select.selected
@@ -103,7 +103,7 @@ stages:
 #        parameters:
 #          - param1: "value"
 
-#  - id: 6-viz
+#  - id: six-viz
 #    inputs:
 #        - 5-pca.pca
 #    outputs:
@@ -119,7 +119,7 @@ stages:
 #        parameters:
 #          - param1: "value"
 
-#  - id: 7-integrate
+#  - id: seven-integrate
 #    inputs:
 #        - 5-pca.pca
 #    outputs:
@@ -136,7 +136,7 @@ stages:
 #          - param1: "value"
 
 
-#  - id: 8a-cluster
+#  - id: eight-cluster
 #    inputs:
 #        - 5-pca.pca
 #        - 3-normalize.normalized
@@ -157,7 +157,7 @@ stages:
 #          - param1: "value"
 
 
-#  - id: 8b-annotate
+#  - id: eight-annotate
 #    inputs:
 #        - 5-pca.pca
 #        - 3-normalize.normalized
