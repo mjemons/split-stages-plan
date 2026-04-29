@@ -1,5 +1,5 @@
 ---
-name: r_conda
+name: scanpy
 channels:
   - https://prefix.dev/almost-conductor
   - conda-forge
