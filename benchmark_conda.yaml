@@ -4,7 +4,7 @@ description: This benchmark lays out stages for each step of an scRNA-seq pipeli
 benchmarker: "Mark Robinson <mark.robinson@mls.uzh.ch>"
 
 # Benchmark configuration
-version: "0.0.2"
+version: "0.0.3"
 
 # The default software environment for this benchmark.
 # One of: apptainer, conda, envmodules.
@@ -37,8 +37,8 @@ stages:
         name: "R-based dataset downloads"
         software_environment: r_conda
         repository:
-          url: https://github.com/scrna-bench/datasets
-          commit: "c0a0612"
+          url: https://github.com/omni-scrna/1-data
+          commit: "1556e23"
         parameters:
           - dataset_name: ["sc-mix"]
 
