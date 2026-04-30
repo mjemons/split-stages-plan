@@ -16,6 +16,12 @@ software_environments:
     r_conda:
         name: R conda env (some packages self built)
         conda: envs/r.yml
+    scanpy:
+        name: scanpy multi-module
+        conda: envs/scanpy.yml
+    scrapper:
+        name: scrapper multi-module
+        conda: envs/scrapper.yml
 
 stages:
   - id: one-data
@@ -86,22 +92,40 @@ stages:
           - selection_type: ["seurat_vst", "scrapper_modelGeneVariances"]
             number_selected: 2000
 
-#  - id: five-pca
-#    inputs:
-#        - 3-normalize.normalized
-#        - 4-select.selected
-#    outputs:
-#      - id: 5-pca.pca
-#        path: "{dataset}_pca.txt.gz"
-#    modules:
-#      - id: whizbang_pca_method_1
-#        name: "the only method you will ever need"
-#        software_environment: "apptainer_env"
-#        repository:
-#          url: https://github.com/CHANGEME/my_method
-#          commit: deadbeef
-#        parameters:
-#          - param1: "value"
+  - id: five-pca
+    resources:
+      cores: 4
+    inputs:
+      - normalized.h5
+      - selected.genes
+    outputs:
+      - id: pca
+        path: "{dataset}_pca.h5"
+        # TODO: this needs https://github.com/omnibenchmark/omnibenchmark/pull/323 merged to work
+        # path: "{name}_{params.solver}_n_{params.n_components}.h5"
+    modules:
+      - id: pca-scanpy
+        name: "scanpy PCA"
+        software_environment: "scanpy"
+        repository:
+          url: https://github.com/omni-scrna/scanpy
+          commit: main
+          entrypoint: pca
+        parameters:
+          - solver: [arpack, randomized]
+            n_components: 50
+            random_seed: 42
+      - id: pca-scrapper
+        name: "scrapper PCA"
+        software_environment: "scrapper"
+        repository:
+          url: https://github.com/omni-scrna/scrapper
+          commit: main
+          entrypoint: pca
+        parameters:
+          - solver: [exact, irlba, random]
+            n_components: 50
+            random_seed: 42
 
 #  - id: six-viz
 #    inputs:
