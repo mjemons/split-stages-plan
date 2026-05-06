@@ -29,6 +29,12 @@ This project is licensed under the MIT License.
    ob run benchmark.yaml
    ```
 
+## Run output validatoin
+
+```bash
+pixi run validation
+```
+
 ## Citation
 
 If you use this benchmark in your research, please cite it using the information in `CITATION.cff`.
