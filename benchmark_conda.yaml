@@ -130,28 +130,28 @@ stages:
             n_components: 50
             random_seed: 42
 
-  #- id: six-embedding-metrics
-  #  inputs:
-  #    - pcas
-  #    - rawdata.clusters_truth
-  #  outputs:
-  #    - id: embedding_metrics
-  #      path: "{dataset}_embedding_metrics.json"
-  #  modules:
-  #    #- id: embedding-metrics-py
-  #    #  name: "Embedding quality metrics in python"
-  #    #  software_environment: "metrics"
-  #    #  repository:
-  #    #    url: https://github.com/omni-scrna/metrics
-  #    #    commit: main
-  #    #    entrypoint: embedding-py
-  #    - id: embedding-metrics-r
-  #      name: "Embedding quality metrics in R"
-  #      software_environment: "metrics"
-  #      repository:
-  #        url: https://github.com/omni-scrna/metrics
-  #        commit: 62a5fbe
-  #        entrypoint: embedding-r
+  - id: six-embedding-metrics
+    inputs:
+      - pcas
+      - rawdata.clusters_truth
+    outputs:
+      - id: embedding_metrics
+        path: "{dataset}_embedding_metrics.json"
+    modules:
+      #- id: embedding-metrics-py
+      #  name: "Embedding quality metrics in python"
+      #  software_environment: "metrics"
+      #  repository:
+      #    url: https://github.com/omni-scrna/metrics
+      #    commit: main
+      #    entrypoint: embedding-py
+      - id: embedding-metrics-r
+        name: "Embedding quality metrics in R"
+        software_environment: "metrics"
+        repository:
+          url: https://github.com/omni-scrna/metrics
+          commit: dc0a4be
+          entrypoint: embedding-r
 
 #  - id: six-viz
 #    inputs:
