@@ -132,7 +132,7 @@ stages:
 
   - id: six-embedding-metrics
     inputs:
-      - pcas
+      - pcas.tsv
       - rawdata.clusters_truth
     outputs:
       - id: embedding_metrics
