@@ -112,7 +112,7 @@ stages:
         software_environment: "scanpy"
         repository:
           url: https://github.com/omni-scrna/scanpy
-          commit: ab0028e
+          commit: 98ffe7c
           entrypoint: pca
         parameters:
           - solver: [arpack, randomized]
@@ -123,7 +123,7 @@ stages:
         software_environment: "scrapper"
         repository:
           url: https://github.com/omni-scrna/scrapper
-          commit: 975e205
+          commit: 5c93b1e
           entrypoint: pca
         parameters:
           - solver: [exact, irlba, random]

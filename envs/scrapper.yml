@@ -13,3 +13,4 @@ dependencies:
 - bioconductor-hdf5array *
 - r-matrix *
 - r-optparse *
+- r-data.table *
