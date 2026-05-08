@@ -11,21 +11,19 @@ version: "0.0.3"
 software_backend: "conda"
 
 # Available software environments
-
 software_environments:
-    r_conda:
-        name: R conda env (some packages self built)
-        conda: envs/r.yml
-    scanpy:
-        name: scanpy multi-module
-        conda: envs/scanpy.yml
-    scrapper:
-        name: scrapper multi-module
-        conda: envs/scrapper.yml
-    metrics:
-        name: metrics env
-        conda: envs/metrics.yaml
-
+  r_conda:
+    name: R conda env (some packages self built)
+    conda: envs/r.yml
+  scanpy:
+    name: scanpy multi-module
+    conda: envs/scanpy.yml
+  scrapper:
+    name: scrapper multi-module
+    conda: envs/scrapper.yml
+  metrics:
+    name: metrics env
+    conda: envs/metrics.yaml
 
 stages:
   - id: one-data
@@ -107,51 +105,51 @@ stages:
         # TODO: this needs https://github.com/omnibenchmark/omnibenchmark/pull/323 merged to work
         # path: "{name}_{params.solver}_n_{params.n_components}.h5"
     modules:
-      #- id: pca-scanpy
-      #  name: "scanpy PCA"
-      #  software_environment: "scanpy"
-      #  repository:
-      #    url: https://github.com/omni-scrna/scanpy
-      #    commit: "9e99653"
-      #    entrypoint: pca
-      #  parameters:
-      #    - solver: [arpack, randomized]
-      #      n_components: 50
-      #      random_seed: 42
+      - id: pca-scanpy
+        name: "scanpy PCA"
+        software_environment: "scanpy"
+        repository:
+          url: https://github.com/omni-scrna/scanpy
+          commit: 98ffe7c
+          entrypoint: pca
+        parameters:
+          - solver: [arpack, randomized]
+            n_components: 50
+            random_seed: 42
       - id: pca-scrapper
         name: "scrapper PCA"
         software_environment: "scrapper"
         repository:
           url: https://github.com/omni-scrna/scrapper
-          commit: 975e205
+          commit: 5c93b1e
           entrypoint: pca
         parameters:
           - solver: [exact, irlba, random]
             n_components: 50
             random_seed: 42
 
-  #- id: six-embedding-metrics
-  #  inputs:
-  #    - pcas
-  #    - rawdata.clusters_truth
-  #  outputs:
-  #    - id: embedding_metrics
-  #      path: "{dataset}_embedding_metrics.json"
-  #  modules:
-  #    #- id: embedding-metrics-py
-  #    #  name: "Embedding quality metrics in python"
-  #    #  software_environment: "metrics"
-  #    #  repository:
-  #    #    url: https://github.com/omni-scrna/metrics
-  #    #    commit: main
-  #    #    entrypoint: embedding-py
-  #    - id: embedding-metrics-r
-  #      name: "Embedding quality metrics in R"
-  #      software_environment: "metrics"
-  #      repository:
-  #        url: https://github.com/omni-scrna/metrics
-  #        commit: 62a5fbe
-  #        entrypoint: embedding-r
+  - id: six-embedding-metrics
+    inputs:
+      - pcas.tsv
+      - rawdata.clusters_truth
+    outputs:
+      - id: embedding_metrics
+        path: "{dataset}_embedding_metrics.json"
+    modules:
+      - id: embedding-metrics-py
+        name: "Embedding quality metrics in python"
+        software_environment: "metrics"
+        repository:
+          url: https://github.com/omni-scrna/metrics
+          commit: 32d08e5
+          entrypoint: embedding-py
+      - id: embedding-metrics-r
+        name: "Embedding quality metrics in R"
+        software_environment: "metrics"
+        repository:
+          url: https://github.com/omni-scrna/metrics
+          commit: 32d08e5
+          entrypoint: embedding-r
 
 #  - id: six-viz
 #    inputs:
@@ -185,7 +183,6 @@ stages:
 #        parameters:
 #          - param1: "value"
 
-
 #  - id: eight-cluster
 #    inputs:
 #        - 5-pca.pca
@@ -206,7 +203,6 @@ stages:
 #        parameters:
 #          - param1: "value"
 
-
 #  - id: eight-annotate
 #    inputs:
 #        - 5-pca.pca
@@ -224,7 +220,6 @@ stages:
 #          commit: deadbeef
 #        parameters:
 #          - param1: "value"
-
 
 #  - id: metrics
 #    inputs:
