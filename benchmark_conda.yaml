@@ -98,6 +98,7 @@ stages:
 
   - id: four-select
     inputs:
+      - rawdata.h5ad
       - normalized.h5
     outputs:
       - id: normalized_selected.h5
@@ -117,9 +118,9 @@ stages:
         software_environment: "py_conda"
         repository:
           url: https://github.com/omni-scrna/4-select-py
-          commit: "b3edf2e"
+          commit: "19e5811"
         parameters:
-          - selection_type: ["scanpy_hvg"]
+          - selection_type: ["scanpy_hvg", "pearson_residuals"]
             number_selected: 2000     
 
   - id: five-pca
