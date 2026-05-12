@@ -110,7 +110,7 @@ stages:
         software_environment: "scanpy"
         repository:
           url: https://github.com/omni-scrna/scanpy
-          commit: 98ffe7c
+          commit: graphs
           entrypoint: pca
         parameters:
           - solver: [arpack, randomized]
@@ -141,15 +141,85 @@ stages:
         software_environment: "metrics"
         repository:
           url: https://github.com/omni-scrna/metrics
-          commit: 32d08e5
+          commit: 0d0050e
           entrypoint: embedding-py
       - id: embedding-metrics-r
         name: "Embedding quality metrics in R"
         software_environment: "metrics"
         repository:
           url: https://github.com/omni-scrna/metrics
-          commit: 32d08e5
+          commit: 0d0050e
           entrypoint: embedding-r
+
+  - id: graph
+    inputs:
+      - pcas.tsv
+    outputs:
+      - id: neighbors.h5
+        path: "{dataset}_neighbors.h5"
+    modules:
+      - id: graph-scanpy
+        name: "scanpy KNN graph"
+        software_environment: "scanpy"
+        repository:
+          url: https://github.com/omni-scrna/scanpy
+          commit: graphs
+          entrypoint: knn
+        parameters:
+          - n_neighbors: 15
+            random_seed: 42
+            flavor: "umap"
+
+  # TODO: re-enable once metrics R module reads the bundled neighbors.h5
+  # - id: graph-metrics
+  #   inputs:
+  #     - distances.h5
+  #     - rawdata.clusters_truth
+  #   outputs:
+  #     - id: graph_metrics
+  #       path: "{dataset}_graph_metrics.json"
+  #   modules:
+  #     - id: graph-metrics-r
+  #       name: "Graph quality metrics in R"
+  #       software_environment: "metrics"
+  #       repository:
+  #         url: https://github.com/omni-scrna/metrics
+  #         commit: 0d0050e
+  #         entrypoint: graph-r
+
+  - id: cluster
+    inputs:
+      - neighbors.h5
+    outputs:
+      - id: clusters.tsv
+        path: "{dataset}_clusters.tsv"
+    modules:
+      - id: cluster-scanpy
+        name: "scanpy Leiden clustering"
+        software_environment: "scanpy"
+        repository:
+          url: https://github.com/omni-scrna/scanpy
+          commit: graphs
+          entrypoint: cluster
+        parameters:
+          - resolution: [0.5, 1.0]
+            random_seed: 42
+
+  - id: cluster-metrics
+    inputs:
+      - clusters.tsv
+      - rawdata.clusters_truth
+    outputs:
+      - id: cluster_metrics
+        path: "{dataset}_cluster_metrics.json"
+    modules:
+      - id: cluster-metrics-r
+        name: "Partition metrics in R"
+        software_environment: "metrics"
+        repository:
+          url: https://github.com/omni-scrna/metrics
+          commit: 0d0050e
+          entrypoint: cluster-r
 
 #  - id: six-viz
 #    inputs:
