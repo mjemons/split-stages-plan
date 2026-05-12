@@ -24,6 +24,9 @@ software_environments:
   metrics:
     name: metrics env
     conda: envs/metrics.yaml
+  integrate:
+    name: integration env
+    conda: envs/integrate.yml
 
 stages:
   - id: one-data
@@ -140,9 +143,29 @@ stages:
             n_components: 50
             random_seed: 42
 
-  - id: six-embedding-metrics
+  - id: six-integrate
     inputs:
       - pcas.tsv
+      - rawdata.h5ad
+    outputs:
+      - id: corrected.tsv
+        path: "{dataset}_corrected.tsv"
+    modules:
+      - id: integration-harmony
+        name: "Harmony batch correction"
+        software_environment: "integrate"
+        repository:
+          url: https://github.com/omni-scrna/integrate
+          commit: TBD
+          entrypoint: harmony-r
+        parameters:
+          - batch_variable: ["Sample"]
+            theta: [1, 2]
+            random_seed: 42
+
+  - id: seven-embedding-metrics
+    inputs:
+      - corrected.tsv
       - rawdata.clusters_truth
     outputs:
       - id: embedding_metrics
