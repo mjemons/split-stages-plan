@@ -46,7 +46,7 @@ stages:
         software_environment: r_conda
         repository:
           url: https://github.com/omni-scrna/1-data
-          commit: 5629065
+          commit: 10112c9
         parameters:
           - dataset_name: ["sc-mix"]
 
@@ -113,7 +113,7 @@ stages:
         software_environment: "seurat"
         repository:
           url: https://github.com/omni-scrna/seurat
-          commit: 01afd7a
+          commit: 4c9ce1d
           entrypoint: select
         parameters:
           - selection_type: ["seurat_vst", "seurat_vst_batch"]
@@ -128,15 +128,15 @@ stages:
           entrypoint: select
         parameters:
           - number_selected: 2000
-      - id: selection-py
-        name: "Python-based scRNA-seq gene selection methods"
-        software_environment: "py_conda"
-        repository:
-          url: https://github.com/omni-scrna/4-select-py
-          commit: "19e5811"
-        parameters:
-          - selection_type: ["scanpy_hvg", "pearson_residuals"]
-            number_selected: 2000     
+      # - id: selection-py
+      #   name: "Python-based scRNA-seq gene selection methods"
+      #   software_environment: "py_conda"
+      #   repository:
+      #     url: https://github.com/omni-scrna/4-select-py
+      #     commit: "19e5811"
+      #   parameters:
+      #     - selection_type: ["scanpy_hvg", "pearson_residuals"]
+      #       number_selected: 2000     
 
 
   - id: five-pca
