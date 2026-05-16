@@ -48,7 +48,7 @@ stages:
           url: https://github.com/omni-scrna/1-data
           commit: 5629065
         parameters:
-          - dataset_name: ["sc-mix"]
+          - dataset_name: ["be1"]
 
   - id: two-filter
     inputs:
@@ -269,8 +269,8 @@ stages:
           commit: b4c0b02
           entrypoint: harmony-r
         parameters:
-          - batch_variable: ["cell_line"]
-            theta: [1, 2]
+          - batch_variable: ["Sample"]
+            theta: [0.1, 0.2]
 
 #  - id: six-viz
 #    inputs:
