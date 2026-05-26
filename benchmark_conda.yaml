@@ -288,6 +288,22 @@ stages:
           - batch_variable: ["Sample"]
             theta: [0.1, 0.2]
 
+  - id: nine-annotate
+    inputs:
+    - normalized_selected.h5
+    outputs:
+    - id: annotations
+      path: '{dataset}_annotations.tsv'
+    modules:
+    - id: annotation-singler
+      name: singler annotation
+      software_environment: annotate
+      repository:
+        url: https://github.com/omni-scrna/9-annotate
+        commit: ba5bfcf
+      parameters:
+        - reference: ["HumanPrimaryCellAtlasData", "BlueprintEncodeData"]
+
 #  - id: six-viz
 #    inputs:
 #        - 5-pca.pca
