@@ -68,7 +68,7 @@ stages:
         name: "R-based dataset downloads for integration"
         software_environment: r_conda
         repository:
-          url: /home/jiayiwang/omni-scrna/1-data
+          url: https://github.com/omni-scrna/1-data
           commit: 601b880
           entrypoint: integration
         parameters:
@@ -303,7 +303,7 @@ stages:
         name: "Harmony batch correction"
         software_environment: "integrate"
         repository:
-          url: /home/jiayiwang/omni-scrna/7-integrate
+          url: https://github.com/omni-scrna/7-integrate
           commit: 00f292d
           entrypoint: harmony-r
         parameters:
