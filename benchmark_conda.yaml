@@ -34,6 +34,7 @@ software_environments:
     name: integration env
     conda: envs/integrate.yml
 
+
 stages:
   - id: one-data
     outputs:
@@ -43,37 +44,24 @@ stages:
         path: "{dataset}.clusters_truth.tsv"
       - id: rawdata.clusters_truth_num
         path: "{dataset}.clusters_truth_num.txt"
+      - id: properties.info
+        path: "{dataset}_properties.info"
     modules:
       - id: datasets
         name: "R-based dataset downloads"
         software_environment: r_conda
         repository:
           url: https://github.com/omni-scrna/1-data
-          commit: 10112c9
+          commit: 3fe3990
         parameters:
-          - dataset_name: ["be1"]
-            batching: true  
-            batch_variable: "cell_line"
-
-  - id: one-data-for-integration
-    outputs:
-     - id: rawdata.h5ad
-        path: "{dataset}.h5ad"
-      - id: rawdata.clusters_truth
-        path: "{dataset}.clusters_truth.tsv"
-      - id: rawdata.clusters_truth_num
-        path: "{dataset}.clusters_truth_num.txt"
-      - id: batch_info.yaml
-        path: "{dataset}_batch_info.yaml"
-    modules:
-      - id: data-for-integration
-        name: "Batch variable identification"
-        software_environment: r_conda
-        repository:
-          url: https://github.com/omni-scrna/one-data-for-integration
-          commit: TBD
-        parameters:
-          - dataset_name: ["be1"]
+          - dataset_name: "be1"
+            batch_var: Sample
+            labels_var: Sample
+            sample_var: Sample
+          - dataset_name: "sc-mix"
+            batch_var: null
+            labels_var: cell_line
+            sample_var: null
 
   - id: two-filter
     inputs:
@@ -129,6 +117,7 @@ stages:
       - rawdata.h5ad
       - normalized.h5
       - filtered.cellids
+      - properties.info
     outputs:
       - id: normalized_selected.h5
         path: "{dataset}_normalized_selected.h5"
@@ -138,18 +127,17 @@ stages:
         software_environment: "seurat"
         repository:
           url: https://github.com/omni-scrna/seurat
-          commit: 4c9ce1d
+          commit: 0ea3db2
           entrypoint: select
         parameters:
           - selection_type: ["seurat_vst", "seurat_vst_batch"]
             number_selected: 2000
-            batch_variable: ["cell_line"] # this can only be used for sc-mix and it doesn't make sense
       - id: selection-scrapper
         name: "Scrapper-based gene selection"
         software_environment: "scrapper"
         repository:
           url: https://github.com/omni-scrna/scrapper
-          commit: 11abd40
+          commit: 7c04214
           entrypoint: select
         parameters:
           - number_selected: 2000
@@ -163,27 +151,6 @@ stages:
       #     - selection_type: ["scanpy_hvg", "pearson_residuals"]
       #       number_selected: 2000
 
-  - id: four-select-per-batch
-    inputs:
-      - rawdata.h5ad
-      - normalized.h5
-      - filtered.cellids
-      - batch_info.yaml
-    outputs:
-      - id: normalized_selected.h5
-        path: "{dataset}_normalized_selected.h5"
-    modules:
-      - id: selection-seurat-per-batch
-        name: "Seurat per-batch VST selection"
-        software_environment: "seurat"
-        repository:
-          url: https://github.com/omni-scrna/seurat
-          commit: TBD
-          entrypoint: select
-        parameters:
-          - selection_type: ["seurat_vst_batch"]
-            number_selected: 2000
-
   - id: five-pca
     resources:
       cores: 4
@@ -192,15 +159,15 @@ stages:
     outputs:
       - id: pcas.tsv
         path: "{dataset}_pcas.tsv"
-        # TODO: this needs https://github.com/omnibenchmark/omnibenchmark/pull/323 merged to work
-        # path: "{name}_{params.solver}_n_{params.n_components}.h5"
+      - id: loadings.tsv
+        path: "{dataset}_loadings.tsv"
     modules:
       - id: pca-scanpy
         name: "scanpy PCA"
         software_environment: "scanpy"
         repository:
           url: https://github.com/omni-scrna/scanpy
-          commit: graphs
+          commit: a2c5d5e
           entrypoint: pca
         parameters:
           - solver: [arpack, randomized]
@@ -211,50 +178,12 @@ stages:
         software_environment: "scrapper"
         repository:
           url: https://github.com/omni-scrna/scrapper
-          commit: 5c93b1e
+          commit: 7c04214
           entrypoint: pca
         parameters:
           - solver: [exact, irlba, random]
             n_components: 50
             random_seed: 42
-
-  - id: five-pca-per-batch
-    resources:
-      cores: 4
-    inputs:
-      - normalized_selected.h5
-      - rawdata.h5ad
-      - batch_info.yaml
-    outputs:
-      - id: pcas_per_batch.tsv
-        path: "{dataset}_pcas_per_batch.tsv"
-      - id: loadings_per_batch.h5
-        path: "{dataset}_loadings_per_batch.h5"
-    modules:
-      - id: pca-per-batch-scrapper
-        name: "scrapper PCA per batch"
-        software_environment: scrapper
-        repository:
-          url: https://github.com/omni-scrna/scrapper
-          commit: TBD
-          entrypoint: pca
-        parameters:
-          - solver: [irlba]
-            n_components: 50
-            random_seed: 42
-            per_batch: true
-      - id: pca-per-batch-scanpy
-        name: "scanpy PCA per batch"
-        software_environment: scanpy
-        repository:
-          url: https://github.com/omni-scrna/scanpy
-          commit: TBD
-          entrypoint: pca
-        parameters:
-          - solver: [arpack, randomized]
-            n_components: 50
-            random_seed: 42
-            per_batch: true
 
   - id: six-embedding-metrics
     inputs:
@@ -291,7 +220,7 @@ stages:
         software_environment: "scanpy"
         repository:
           url: https://github.com/omni-scrna/scanpy
-          commit: graphs
+          commit: a2c5d5e
           entrypoint: knn
         parameters:
           - n_neighbors: 15
@@ -315,48 +244,47 @@ stages:
   #         commit: 0d0050e
   #         entrypoint: graph-r
 
-  - id: cluster
-    inputs:
-      - neighbors.h5
-    outputs:
-      - id: clusters.tsv
-        path: "{dataset}_clusters.tsv"
-    modules:
-      - id: cluster-scanpy
-        name: "scanpy Leiden clustering"
-        software_environment: "scanpy"
-        repository:
-          url: https://github.com/omni-scrna/scanpy
-          commit: graphs
-          entrypoint: cluster
-        parameters:
-          - resolution: [0.5, 1.0]
-            random_seed: 42
+  # - id: cluster
+  #   inputs:
+  #     - neighbors.h5
+  #   outputs:
+  #     - id: clusters.tsv
+  #       path: "{dataset}_clusters.tsv"
+  #   modules:
+  #     - id: cluster-scanpy
+  #       name: "scanpy Leiden clustering"
+  #       software_environment: "scanpy"
+  #       repository:
+  #         url: https://github.com/omni-scrna/scanpy
+  #         commit: 7454965
+  #         entrypoint: cluster
+  #       parameters:
+  #         - resolution: [0.5, 1.0]
+  #           random_seed: 42
 
-  - id: cluster-metrics
-    inputs:
-      - clusters.tsv
-      - rawdata.clusters_truth
-    outputs:
-      - id: cluster_metrics
-        path: "{dataset}_cluster_metrics.json"
-    modules:
-      - id: cluster-metrics-r
-        name: "Partition metrics in R"
-        software_environment: "metrics"
-        repository:
-          url: https://github.com/omni-scrna/metrics
-          commit: 0d0050e
-          entrypoint: cluster-r
+  # - id: cluster-metrics
+  #   inputs:
+  #     - clusters.tsv
+  #     - rawdata.clusters_truth
+  #   outputs:
+  #     - id: cluster_metrics
+  #       path: "{dataset}_cluster_metrics.json"
+  #   modules:
+  #     - id: cluster-metrics-r
+  #       name: "Partition metrics in R"
+  #       software_environment: "metrics"
+  #       repository:
+  #         url: https://github.com/omni-scrna/metrics
+  #         commit: 0d0050e
+  #         entrypoint: cluster-r
 
   - id: seven-integrate
     inputs:
       - pcas.tsv
-      - rawdata.h5ad
-      - batch_info.yaml
-      - pcas_per_batch.tsv
-      - loadings_per_batch.h5
+      - loadings.tsv
       - normalized_selected.h5
+      - rawdata.h5ad
+      - properties.info
     outputs:
       - id: corrected.tsv
         path: "{dataset}_corrected.tsv"
@@ -366,109 +294,18 @@ stages:
         software_environment: "integrate"
         repository:
           url: https://github.com/omni-scrna/7-integrate
-          commit: TBD
+          commit: cdcbade
           entrypoint: harmony-r
         parameters:
           - theta: [0.1, 0.2]
-      - id: integration-seurat-rpca
-        name: "Seurat RPCA batch correction"
+      - id: integration-seurat
+        name: "Seurat IntegrateLayers batch correction"
         software_environment: "seurat"
         repository:
           url: https://github.com/omni-scrna/seurat
-          commit: TBD
-          entrypoint: rpca
+          commit: 0ea3db2
+          entrypoint: integrate
         parameters:
-          - dims: [30]
-            k_anchor: [5]
-
-#  - id: six-viz
-#    inputs:
-#        - 5-pca.pca
-#    outputs:
-#      - id: 6-viz.components
-#        path: "{dataset}_components.txt.gz"
-#    modules:
-#      - id: cool_method_1
-#        name: "the only method you will ever need"
-#        software_environment: "apptainer_env"
-#        repository:
-#          url: https://github.com/CHANGEME/my_method
-#          commit: deadbeef
-#        parameters:
-#          - param1: "value"
-
-#  - id: seven-integrate
-#    inputs:
-#        - 5-pca.pca
-#    outputs:
-#      - id: 7-integrate.integrated
-#        path: "{dataset}_integrated.txt.gz"
-#    modules:
-#      - id: integration_method_1
-#        name: "the only method you will ever need"
-#        software_environment: "apptainer_env"
-#        repository:
-#          url: https://github.com/CHANGEME/my_method
-#          commit: deadbeef
-#        parameters:
-#          - param1: "value"
-
-#  - id: eight-cluster
-#    inputs:
-#        - 5-pca.pca
-#        - 3-normalize.normalized
-#        - 7-integrate.integrated
-#    outputs:
-#      - id: 8a-cluster.graph
-#        path: "{dataset}_graph.txt.gz"
-#      - id: 8a-cluster.clusters
-#        path: "{dataset}_clusters.txt.gz"
-#    modules:
-#      - id: whizbang_clustering_1
-#        name: "the only method you will ever need"
-#        software_environment: "apptainer_env"
-#        repository:
-#          url: https://github.com/CHANGEME/my_method
-#          commit: deadbeef
-#        parameters:
-#          - param1: "value"
-
-#  - id: eight-annotate
-#    inputs:
-#        - 5-pca.pca
-#        - 3-normalize.normalized
-#        - 7-integrate.integrated
-#    outputs:
-#      - id: 8b-annotate.annotations
-#        path: "{dataset}_annotations.txt.gz"
-#    modules:
-#      - id: whizbang_prediction_1
-#        name: "the only method you will ever need"
-#        software_environment: "apptainer_env"
-#        repository:
-#          url: https://github.com/CHANGEME/my_method
-#          commit: deadbeef
-#        parameters:
-#          - param1: "value"
-
-#  - id: metrics
-#    inputs:
-#        - 5-pca.pca
-#        - 3-normalize.normalized
-#        - 6-viz.components
-#        - 7-integrate.integrated
-#        - 8a-cluster.clusters
-#        - 8a-cluster.graph
-#        - 8b-annotate.annotations
-#    outputs:
-#      - id: metrics.scores
-#        path: "{dataset}.scores.gz"
-#    modules:
-#      - id: strict_metric_1
-#        name: "a very well defined metric"
-#        software_environment: "apptainer_env"
-#        repository:
-#          url: https://github.com/CHANGEME/the_right_metric
-#          commit: c0ffee
-#        parameters:
-#          - foo: "bar"
+          - method: [rpca, fastmnn]
+            dims: 50
+            k_anchor: 5
