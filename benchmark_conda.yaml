@@ -127,7 +127,7 @@ stages:
         software_environment: "seurat"
         repository:
           url: https://github.com/omni-scrna/seurat
-          commit: 1093f6e
+          commit: 356b63c
           entrypoint: select
         parameters:
           - selection_type: ["seurat_vst", "seurat_vst_batch"]
@@ -294,18 +294,17 @@ stages:
         software_environment: "integrate"
         repository:
           url: https://github.com/omni-scrna/7-integrate
-          commit: cdcbade
+          commit: 7a4963a
           entrypoint: harmony-r
         parameters:
-          - theta: [0.1, 0.2]
+          - theta: [0.1, 2]
       - id: integration-seurat
         name: "Seurat IntegrateLayers batch correction"
         software_environment: "seurat"
         repository:
           url: https://github.com/omni-scrna/seurat
-          commit: 1093f6e
+          commit: 356b63c
           entrypoint: integrate
         parameters:
-          - method: [rpca, fastmnn]
-            dims: 50
-            k_anchor: 5
+          - method: [rpca]
+            k_anchor: [5, 20]
