@@ -32,7 +32,7 @@ This project is licensed under the MIT License.
 ## Run output validatoin
 
 ```bash
-pixi run validation
+pixi run validate-artifacts
 ```
 
 ## Citation

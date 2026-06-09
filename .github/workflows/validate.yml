@@ -1,0 +1,24 @@
+name: Validate plan
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate-plan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up pixi
+        uses: prefix-dev/setup-pixi@v0.8.10
+        with:
+          environments: plan
+          # omnibenchmark is pinned to a git branch, so the lockfile drifts; don't fail on it.
+          frozen: false
+          locked: false
+
+      - name: Validate benchmark plan
+        run: pixi run validate-plan

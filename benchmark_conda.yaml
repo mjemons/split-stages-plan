@@ -5,6 +5,10 @@ benchmarker: "Mark Robinson <mark.robinson@mls.uzh.ch>"
 
 # Benchmark configuration
 version: "0.0.3"
+api_version: "0.4.0"
+
+provenance:
+  canonical_url: https://raw.githubusercontent.com/omni-scrna/split-stages-plan/refs/heads/main/benchmark_conda.yaml
 
 # The default software environment for this benchmark.
 # One of: apptainer, conda, envmodules.
@@ -247,39 +251,39 @@ stages:
   #         commit: 0d0050e
   #         entrypoint: graph-r
 
-  # - id: cluster
-  #   inputs:
-  #     - neighbors.h5
-  #   outputs:
-  #     - id: clusters.tsv
-  #       path: "{dataset}_clusters.tsv"
-  #   modules:
-  #     - id: cluster-scanpy
-  #       name: "scanpy Leiden clustering"
-  #       software_environment: "scanpy"
-  #       repository:
-  #         url: https://github.com/omni-scrna/scanpy
-  #         commit: 7454965
-  #         entrypoint: cluster
-  #       parameters:
-  #         - resolution: [0.5, 1.0]
-  #           random_seed: 42
+  - id: cluster
+    inputs:
+      - neighbors.h5
+    outputs:
+      - id: clusters.tsv
+        path: "{dataset}_clusters.tsv"
+    modules:
+      - id: cluster-scanpy
+        name: "scanpy Leiden clustering"
+        software_environment: "scanpy"
+        repository:
+          url: https://github.com/omni-scrna/scanpy
+          commit: graphs
+          entrypoint: cluster
+        parameters:
+          - resolution: [0.5, 1.0]
+            random_seed: 42
 
-  # - id: cluster-metrics
-  #   inputs:
-  #     - clusters.tsv
-  #     - rawdata.clusters_truth
-  #   outputs:
-  #     - id: cluster_metrics
-  #       path: "{dataset}_cluster_metrics.json"
-  #   modules:
-  #     - id: cluster-metrics-r
-  #       name: "Partition metrics in R"
-  #       software_environment: "metrics"
-  #       repository:
-  #         url: https://github.com/omni-scrna/metrics
-  #         commit: 0d0050e
-  #         entrypoint: cluster-r
+  - id: cluster-metrics
+    inputs:
+      - clusters.tsv
+      - rawdata.clusters_truth
+    outputs:
+      - id: cluster_metrics
+        path: "{dataset}_cluster_metrics.json"
+    modules:
+      - id: cluster-metrics-r
+        name: "Partition metrics in R"
+        software_environment: "metrics"
+        repository:
+          url: https://github.com/omni-scrna/metrics
+          commit: 0d0050e
+          entrypoint: cluster-r
 
   - id: seven-integrate
     inputs:
