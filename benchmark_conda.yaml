@@ -134,7 +134,7 @@ stages:
         software_environment: "seurat"
         repository:
           url: https://github.com/omni-scrna/seurat
-          commit: 356b63c
+          commit: 7d553fb
           entrypoint: select
         parameters:
           - selection_type: ["seurat_vst", "seurat_vst_batch"]
@@ -144,7 +144,7 @@ stages:
         software_environment: "scrapper"
         repository:
           url: https://github.com/omni-scrna/scrapper
-          commit: 7c04214
+          commit: 21463b5
           entrypoint: select
         parameters:
           - number_selected: 2000
@@ -174,7 +174,7 @@ stages:
         software_environment: "scanpy"
         repository:
           url: https://github.com/omni-scrna/scanpy
-          commit: a2c5d5e
+          commit: 83f0d49
           entrypoint: pca
         parameters:
           - solver: [arpack, randomized]
@@ -185,7 +185,7 @@ stages:
         software_environment: "scrapper"
         repository:
           url: https://github.com/omni-scrna/scrapper
-          commit: 7c04214
+          commit: 21463b5
           entrypoint: pca
         parameters:
           - solver: [exact, irlba, random]
@@ -227,7 +227,7 @@ stages:
         software_environment: "scanpy"
         repository:
           url: https://github.com/omni-scrna/scanpy
-          commit: a2c5d5e
+          commit: 83f0d49
           entrypoint: knn
         parameters:
           - n_neighbors: 15
@@ -301,7 +301,7 @@ stages:
         software_environment: "integrate"
         repository:
           url: https://github.com/omni-scrna/7-integrate
-          commit: 7a4963a
+          commit: 108fa8c
           entrypoint: harmony-r
         parameters:
           - theta: [0.1, 2]
@@ -310,7 +310,7 @@ stages:
         software_environment: "seurat"
         repository:
           url: https://github.com/omni-scrna/seurat
-          commit: 356b63c
+          commit: 7d553fb
           entrypoint: integrate
         parameters:
           - method: [rpca]
