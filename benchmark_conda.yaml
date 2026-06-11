@@ -65,10 +65,10 @@ stages:
             batch_var: Sample
             labels_var: Sample
             sample_var: Sample
-          - dataset_name: "sc-mix"
-            batch_var: null
-            labels_var: cell_line
-            sample_var: null
+          #- dataset_name: "sc-mix"
+          #  batch_var: null
+          #  labels_var: cell_line
+          #  sample_var: null
 
   - id: two-filter
     inputs:
@@ -227,7 +227,7 @@ stages:
         software_environment: "scanpy"
         repository:
           url: https://github.com/omni-scrna/scanpy
-          commit: 83f0d49
+          commit: 88c668d
           entrypoint: knn
         parameters:
           - n_neighbors: 15
