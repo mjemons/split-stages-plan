@@ -319,8 +319,8 @@ stages:
         name: "Scanorama batch correction"
         software_environment: "scanpy"
         repository:
-          url: /home/jiayiwang/omni-scrna/scanpy
-          commit: scanorama
+          url: https://github.com/omni-scrna/scanpy
+          commit: 8c5bd85
           entrypoint: scanorama
 
   - id: nine-annotate
