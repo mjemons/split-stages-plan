@@ -1,5 +1,5 @@
 {
-  "interface": "normalize",
+  "stage": "three-normalize",
   "version": "0.1.0",
   "benchmark": "omni-scrna/split-stages-plan",
   "args": [

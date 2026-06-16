@@ -13,15 +13,16 @@ see the boilerplate's
 
 ## The schema file
 
-A stage's contract is one file, `schema/<name>.json`. The `<name>` is the module
-**entrypoint** it binds to (e.g. `embedding`, `knn`) — not the plan's internal
-stage id (those carry ordinal prefixes like `six-embedding-metrics`, and language
-variants such as `embedding-py` / `embedding-r` share one schema). For example
-`schema/embedding.json`:
+A stage's contract is one file, `schema/<stage-id>.json`, named for the stage's
+`id` in the plan (e.g. `two-filter`, `six-embedding-metrics`). Every module
+implementing that stage shares this one file — including language variants, which
+are just separate modules under the same stage (e.g. `embedding-metrics-py` and
+`embedding-metrics-r` both implement `six-embedding-metrics`). For example
+`schema/six-embedding-metrics.json`:
 
 ```json
 {
-  "interface": "embedding",
+  "stage": "six-embedding-metrics",
   "version": "0.1.0",
   "benchmark": "omni-scrna/split-stages-plan",
   "args": [
@@ -31,7 +32,7 @@ variants such as `embedding-py` / `embedding-r` share one schema). For example
 }
 ```
 
-Top level: `interface` (the schema's name), `version`, and an optional
+Top level: `stage` (the stage `id` from the plan), `version`, and an optional
 `benchmark`. Each entry in `args` is one flag:
 
 | field | required | meaning |
@@ -45,9 +46,6 @@ Top level: `interface` (the schema's name), `version`, and an optional
 Every declared arg is **required** (a run must be reproducible from its invocation
 line, fully explicit, no defaults). Unknown flags are rejected by the module's
 parser.
-
-> **Terminology note.** We call these *stage schemas* (or *contracts*) in documentation;
-> in the code they implement `interfaces`.
 
 ### Types
 
@@ -92,10 +90,10 @@ Three kinds of args, by owner — only the first two are schema-driven:
 | source | what it holds | who owns it | on `pull` / update |
 |---|---|---|---|
 | `_base.json` | universal args every module gets (`--output_dir`, `--name`) | the benchmark | overwritten |
-| `<name>.json` | one stage's I/O contract | the benchmark | overwritten |
+| `<stage-id>.json` | one stage's I/O contract | the benchmark | overwritten |
 | the module's entrypoint | its method params (`--solver`, …) | the module author | never touched |
 
-`add_base_args` reads `_base.json`; `add_stage_args(p, "<name>")` reads the stage
+`add_base_args` reads `_base.json`; `add_stage_args(p, "<stage-id>")` reads the stage
 schema. Method parameters are **not** in any schema — the module author
 hand-writes them in plain `argparse` / base R.
 
@@ -103,7 +101,7 @@ hand-writes them in plain `argparse` / base R.
 
 ```json
 {
-  "interface": "_base",
+  "stage": "_base",
   "version": "0.1.0",
   "args": [
     { "flag": "--output_dir", "type": "path", "help": "Output directory for results" },
@@ -114,10 +112,10 @@ hand-writes them in plain `argparse` / base R.
 
 ## Where these live
 
-The schemas — both `_base.json` and each `<name>.json` — live here in this
+The schemas — both `_base.json` and each `<stage-id>.json` — live here in this
 benchmark's [`schema/`](../schema/) directory and are owned by the benchmark author. A
-module vendors the ones it implements into its own `src/common/schema/` via the
-boilerplate's `pull.py` script; those vendored copies are
+module copies the ones it implements into its own `src/common/schema/` via the
+boilerplate's `pull.py` script; those copies are
 **overwrite-on-update**: you should not edit them by hand in a module.
 
 Each schema is versioned **independently** by its own top-level `version` field —

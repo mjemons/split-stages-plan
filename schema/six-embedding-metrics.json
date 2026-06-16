@@ -1,5 +1,5 @@
 {
-  "interface": "embedding",
+  "stage": "six-embedding-metrics",
   "version": "0.1.0",
   "benchmark": "omni-scrna/split-stages-plan",
   "args": [
