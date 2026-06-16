@@ -1,0 +1,75 @@
+---
+title: split-stages-plan
+---
+flowchart TD
+	classDef param fill:#f96
+	subgraph one-data
+		datasets
+	end
+	subgraph two-filter
+		filtering-r
+		datasets --> filtering-r
+		filtering-py
+		datasets --> filtering-py
+	end
+	subgraph three-normalize
+		normalization-r
+		filtering-py --> normalization-r
+		filtering-r --> normalization-r
+		normalization-py
+		filtering-py --> normalization-py
+		filtering-r --> normalization-py
+	end
+	subgraph four-select
+		selection-seurat
+		normalization-py --> selection-seurat
+		normalization-r --> selection-seurat
+		selection-scrapper
+		normalization-py --> selection-scrapper
+		normalization-r --> selection-scrapper
+	end
+	subgraph five-pca
+		pca-scanpy
+		selection-scrapper --> pca-scanpy
+		selection-seurat --> pca-scanpy
+		pca-scrapper
+		selection-scrapper --> pca-scrapper
+		selection-seurat --> pca-scrapper
+	end
+	subgraph six-embedding-metrics
+		embedding-metrics-py
+		pca-scanpy --> embedding-metrics-py
+		pca-scrapper --> embedding-metrics-py
+		embedding-metrics-r
+		pca-scanpy --> embedding-metrics-r
+		pca-scrapper --> embedding-metrics-r
+	end
+	subgraph nngraph
+		nngraph-scanpy
+		pca-scanpy --> nngraph-scanpy
+		pca-scrapper --> nngraph-scanpy
+	end
+	subgraph cluster
+		cluster-scanpy
+		nngraph-scanpy --> cluster-scanpy
+	end
+	subgraph cluster-metrics
+		cluster-metrics-r
+		cluster-scanpy --> cluster-metrics-r
+	end
+	subgraph seven-integrate
+		integration-harmony
+		pca-scanpy --> integration-harmony
+		pca-scrapper --> integration-harmony
+		integration-seurat
+		pca-scanpy --> integration-seurat
+		pca-scrapper --> integration-seurat
+		integration-scanorama
+		pca-scanpy --> integration-scanorama
+		pca-scrapper --> integration-scanorama
+	end
+	subgraph nine-annotate
+		annotation-singler
+		selection-scrapper --> annotation-singler
+		selection-seurat --> annotation-singler
+	end
