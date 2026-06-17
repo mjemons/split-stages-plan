@@ -11,8 +11,8 @@ on:
   workflow_dispatch:
     inputs:
       cores:
-        description: "Cores for the full run"
-        default: "24"
+        description: "Cores for the run (fixture gate + full run)"
+        default: "20"
       clean:
         description: "Wipe the cached output dirs and start fresh"
         type: boolean
@@ -53,7 +53,7 @@ jobs:
         run: |
           mkdir -p "$OB_FIXTURE_DIR"
           pixi run -e plan ob run benchmark_ci.yaml \
-            --unpinned --out-dir "$OB_FIXTURE_DIR" --cores 4
+            --unpinned --out-dir "$OB_FIXTURE_DIR" --cores "${{ inputs.cores || '20' }}"
 
   # --- Heavy full run, only after the fixture gate passes ---------------------
   full:
@@ -76,7 +76,7 @@ jobs:
       - name: Ensure cached output dir exists
         run: mkdir -p "$OB_OUT_DIR"
 
-      - name: Run full benchmark (${{ inputs.cores }} cores)
+      - name: Run full benchmark (${{ inputs.cores || '20' }} cores)
         run: |
           pixi run -e plan ob run benchmark_conda.yaml \
-            --unpinned --out-dir "$OB_OUT_DIR" --cores "${{ inputs.cores }}" -k
+            --unpinned --out-dir "$OB_OUT_DIR" --cores "${{ inputs.cores || '20' }}" -k
