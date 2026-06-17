@@ -80,6 +80,12 @@ stages:
       - id: filtered.cellids
         path: "{dataset}_cellids.txt.gz"
     modules:
+      - id: filter-scrapper
+        name: "scrapper-style filtering"
+        software_environment: "scrapper"
+        repository:
+          url: https://github.com/scrna-bench/scrapper
+          commit: TODO
       - id: filtering-r
         name: "R-based cell-level filters"
         software_environment: "r_conda"
@@ -87,7 +93,7 @@ stages:
           url: https://github.com/scrna-bench/2-filter
           commit: ac74749
         parameters:
-          - filter_type: ["manual", "scrapper-auto"]
+          - filter_type: ["manual"]
       - id: filtering-py
         name: "Python-based cell-level filters"
         software_environment: "py_conda"
@@ -113,6 +119,12 @@ stages:
           commit: b2fb9f3
         parameters:
           - normalization_type: ["seurat_log1pCP10k", "scuttle_geometricSizeFactors"]
+      - id: normalize-scrapper
+        name: "scrapper-based normalization"
+        software_environment: "scrapper"
+        repository:
+          url: https://github.com/scrna-bench/scrapper
+          commit: TODO
       - id: normalization-py
         name: "Python-based scRNA-seq normalization methods"
         software_environment: "py_conda"
