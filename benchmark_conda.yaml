@@ -84,13 +84,13 @@ stages:
         name: "scrapper-style filtering"
         software_environment: "scrapper"
         repository:
-          url: https://github.com/scrna-bench/scrapper
+          url: https://github.com/omni-scrna/scrapper
           commit: d3dfb73
       - id: filtering-r
         name: "R-based cell-level filters"
         software_environment: "r_conda"
         repository:
-          url: https://github.com/scrna-bench/2-filter
+          url: https://github.com/omni-scrna/2-filter
           commit: ac74749
         parameters:
           - filter_type: ["manual"]
@@ -115,7 +115,7 @@ stages:
         name: "R-based scRNA-seq normalization methods"
         software_environment: "r_conda"
         repository:
-          url: https://github.com/scrna-bench/3-normalize
+          url: https://github.com/omni-scrna/3-normalize
           commit: b2fb9f3
         parameters:
           - normalization_type: ["seurat_log1pCP10k", "scuttle_geometricSizeFactors"]
@@ -123,7 +123,7 @@ stages:
         name: "scrapper-based normalization"
         software_environment: "scrapper"
         repository:
-          url: https://github.com/scrna-bench/scrapper
+          url: https://github.com/omni-scrna/scrapper
           commit: d3dfb73
       - id: normalization-py
         name: "Python-based scRNA-seq normalization methods"
