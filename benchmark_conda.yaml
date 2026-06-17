@@ -85,7 +85,7 @@ stages:
         software_environment: "scrapper"
         repository:
           url: https://github.com/scrna-bench/scrapper
-          commit: TODO
+          commit: d3dfb73
       - id: filtering-r
         name: "R-based cell-level filters"
         software_environment: "r_conda"
@@ -124,7 +124,7 @@ stages:
         software_environment: "scrapper"
         repository:
           url: https://github.com/scrna-bench/scrapper
-          commit: TODO
+          commit: d3dfb73
       - id: normalization-py
         name: "Python-based scRNA-seq normalization methods"
         software_environment: "py_conda"
