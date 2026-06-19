@@ -62,7 +62,7 @@ stages:
         software_environment: r_conda
         repository:
           url: https://github.com/omni-scrna/1-data
-          commit: schema-cli-rearrange
+          commit: 3a582a
         parameters:
           #- dataset_name: "be1-subset"
           #  batch_var: Sample
@@ -90,7 +90,7 @@ stages:
         software_environment: "scrapper"
         repository:
           url: https://github.com/omni-scrna/scrapper
-          commit: schema-cli-rearrange
+          commit: 19b1ae8
           entrypoint: filter
       # TODO: rewire these below to handle properties.info arg
       #- id: filtering-r
@@ -118,27 +118,27 @@ stages:
       - id: normalized.h5
         path: "{dataset}_normalized.h5"
     modules:
-      - id: normalization-r
-        name: "R-based scRNA-seq normalization methods"
-        software_environment: "r_conda"
-        repository:
-          url: https://github.com/omni-scrna/3-normalize
-          commit: b2fb9f3
-        parameters:
-          - normalization_type: ["seurat_log1pCP10k", "scuttle_geometricSizeFactors"]
+      #- id: normalization-r
+      #  name: "R-based scRNA-seq normalization methods"
+      #  software_environment: "r_conda"
+      #  repository:
+      #    url: https://github.com/omni-scrna/3-normalize
+      #    commit: b2fb9f3
+      #  parameters:
+      #    - normalization_type: ["seurat_log1pCP10k", "scuttle_geometricSizeFactors"]
       - id: normalize-scrapper
         name: "scrapper-based normalization"
         software_environment: "scrapper"
         repository:
           url: https://github.com/omni-scrna/scrapper
-          commit: schema-cli-rearrange
+          commit: 19b1ae8
           entrypoint: normalize
       - id: normalization-py
         name: "Python-based scRNA-seq normalization methods"
         software_environment: "py_conda"
         repository:
           url: https://github.com/omni-scrna/3-normalize-py
-          commit: "6a95673"
+          commit: 6a95673
         parameters:
           - normalization_type: ["scanpy_log1pCP10k"]
 
