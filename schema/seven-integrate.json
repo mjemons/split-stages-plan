@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "benchmark": "omni-scrna/split-stages-plan",
   "args": [
-    { "flag": "--normalized_selected.h5", "dest": "input_h5", "type": "path", "help": "Normalized, gene-selected matrix H5 (output from SELECT stage)" },
+    { "flag": "--normalized_selected.h5", "dest": "input_h5", "type": "path", "help": "Normalized, gene-selected matrix H5" },
     { "flag": "--pcas.tsv", "dest": "pcas_tsv", "type": "path", "help": "PCA embedding TSV (cell_ids as rownames)" },
     { "flag": "--loadings.tsv", "dest": "loadings_tsv", "type": "path", "help": "Loadings TSV" },
-    { "flag": "--rawdata.h5ad", "dest": "input_h5", "type": "path", "help": "rawdata H5AD file (output from DATA stage)" },
-    { "flag": "--properties.info", "dest": "properties_info", "type": "path", "help": "JSON file with relevant column names (output from DATA stage)" }
+    { "flag": "--rawdata.h5ad", "dest": "input_h5", "type": "path", "help": "rawdata H5AD file" },
+    { "flag": "--properties.info", "dest": "properties_info", "type": "path", "help": "JSON file with relevant column names" }
   ]
 }
 
