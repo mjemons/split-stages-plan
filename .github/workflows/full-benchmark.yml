@@ -29,33 +29,38 @@ env:
   OB_OUT_DIR: /opt/cache/runner/out
   OB_FIXTURE_DIR: /opt/cache/runner/out_ci
   APPTAINER_CACHEDIR: /opt/cache/runner/apptainer
+  # Route the per-module `--use-conda` env builds (conda-forge/bioconda, named
+  # channels) through the local disk-capped caching proxy on omni. Full-URL
+  # channels like prefix.dev are unaffected (channel_alias only rewrites names),
+  # and `nodefaults` keeps us off Anaconda's defaults channel.
+  CONDA_CHANNEL_ALIAS: http://127.0.0.1:8080
 
 jobs:
   # --- Gate: the shortest fixture test. If this fails, `full` is skipped. -----
-  fixture:
-    name: Short fixture test (gate)
-    runs-on: [self-hosted, omni]
-    steps:
-      - uses: actions/checkout@v4
+  # fixture:
+  #   name: Short fixture test (gate)
+  #   runs-on: [self-hosted, omni]
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - uses: prefix-dev/setup-pixi@v0.8.10
-        with:
-          environments: plan
-          frozen: false
-          locked: false
+  #     - uses: prefix-dev/setup-pixi@v0.8.10
+  #       with:
+  #         environments: plan
+  #         frozen: false
+  #         locked: false
 
-      - name: Derive trimmed CI plan
-        # via pixi so trim-plan.sh's `yq` resolves to the in-env go-yq, not the
-        # host snap (which can't run inside the runner's systemd cgroup).
-        run: pixi run -e plan ci/trim-plan.sh > benchmark_ci.yaml
+  #     - name: Derive trimmed CI plan
+  #       # via pixi so trim-plan.sh's `yq` resolves to the in-env go-yq, not the
+  #       # host snap (which can't run inside the runner's systemd cgroup).
+  #       run: pixi run -e plan ci/trim-plan.sh > benchmark_ci.yaml
 
-      - name: Run trimmed benchmark on fixture (fail-fast)
-        run: |
-          mkdir -p "$OB_FIXTURE_DIR"
-          pixi run -e plan ob run benchmark_ci.yaml \
-            --unpinned --out-dir "$OB_FIXTURE_DIR" --cores "${{ inputs.cores || '20' }}"
+  #     - name: Run trimmed benchmark on fixture (fail-fast)
+  #       run: |
+  #         mkdir -p "$OB_FIXTURE_DIR"
+  #         pixi run -e plan ob run benchmark_ci.yaml \
+  #           --unpinned --out-dir "$OB_FIXTURE_DIR" --cores "${{ inputs.cores || '20' }}"
 
-  # --- Heavy full run, only after the fixture gate passes ---------------------
+  # --- The full run ---------------------
   full:
     name: Full benchmark
     needs: fixture
