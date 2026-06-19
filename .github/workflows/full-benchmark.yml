@@ -63,7 +63,7 @@ jobs:
   # --- The full run ---------------------
   full:
     name: Full benchmark
-    needs: fixture
+    # needs: fixture
     runs-on: [self-hosted, omni]
     steps:
       - uses: actions/checkout@v4
