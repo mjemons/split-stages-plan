@@ -62,7 +62,7 @@ stages:
         software_environment: r_conda
         repository:
           url: https://github.com/omni-scrna/1-data
-          commit: 3a582a
+          commit: harmonize-argparsing
         parameters:
           #- dataset_name: "be1-subset"
           #  batch_var: Sample
@@ -90,7 +90,7 @@ stages:
         software_environment: "scrapper"
         repository:
           url: https://github.com/omni-scrna/scrapper
-          commit: 19b1ae8
+          commit: harmonize-argparsing
           entrypoint: filter
 
   - id: NORM
@@ -106,7 +106,7 @@ stages:
         software_environment: "scrapper"
         repository:
           url: https://github.com/omni-scrna/scrapper
-          commit: 19b1ae8
+          commit: harmonize-argparsing 
           entrypoint: normalize
       # TODO: below normalization needs to be rewired to scanpy entrypoint
       #- id: normalization-py
@@ -143,7 +143,7 @@ stages:
         software_environment: "scrapper"
         repository:
           url: https://github.com/omni-scrna/scrapper
-          commit: 21463b5
+          commit: harmonize-argparsing
           entrypoint: select
         parameters:
           - number_selected: 2000
