@@ -80,7 +80,7 @@ stages:
   - id: FILT
     inputs:
       - rawdata_h5ad
-      - properties-info
+      - properties_info
     outputs:
       - id: filtered_cellids
         path: "{dataset}_cellids.txt.gz"
