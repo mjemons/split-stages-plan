@@ -85,7 +85,7 @@ stages:
       - id: filtered_cellids
         path: "{dataset}_cellids.txt.gz"
     modules:
-      - id: f-scrapper
+      - id: filt-scrapper
         name: "scrapper-style filtering"
         software_environment: "scrapper"
         repository:
@@ -108,8 +108,6 @@ stages:
           url: https://github.com/omni-scrna/scrapper
           commit: harmonize-argparsing 
           entrypoint: normalize
-      # TODO: implement normalization methods in seurat?
-      # ----------------------------------
       # TODO: below normalization needs to be rewired to scanpy entrypoint
       #- id: normalization-py
       #  name: "Python-based scRNA-seq normalization methods"
@@ -176,7 +174,7 @@ stages:
         software_environment: "scanpy"
         repository:
           url: https://github.com/omni-scrna/scanpy
-          commit: 83f0d49  # TODO: convert to new param handling
+          commit: harmonize-argparsing  
           entrypoint: pca
         parameters:
           - solver: [arpack, randomized]
@@ -193,7 +191,7 @@ stages:
           - solver: [exact, irlba, random]
             n_components: 50
             random_seed: 42
-      #- id: pca-seurat  # TODO: wire seurat pca
+      #- id: pca-seurat  # TODO: wire seurat pca methods
       #    commit: 
 
   - id: EMBED-M
@@ -204,19 +202,20 @@ stages:
       - id: embedding_metrics
         path: "{dataset}_embedding_metrics.json"
     modules:
-      - id: embed-m-py
-        name: "Embedding quality metrics in python"
-        software_environment: "metrics"
-        repository:
-          url: https://github.com/omni-scrna/metrics
-          commit: 0d0050e  # TODO: convert to new param handling
-          entrypoint: embedding-py
+      # TODO: convert below to new param handling
+      #- id: embed-m-py
+      #  name: "Embedding quality metrics in python"
+      #  software_environment: "metrics"
+      #  repository:
+      #    url: https://github.com/omni-scrna/metrics
+      #    commit: 0d0050e  
+      #    entrypoint: embedding-py
       - id: embed-m-r
         name: "Embedding quality metrics in R"
         software_environment: "metrics"
         repository:
           url: https://github.com/omni-scrna/metrics
-          commit: 0d0050e  # TODO: convert to new param handling
+          commit: harmonize-argparsing
           entrypoint: embedding-r
 
   - id: NNG
@@ -305,7 +304,7 @@ stages:
         software_environment: "integrate"
         repository:
           url: https://github.com/omni-scrna/7-integrate
-          commit: 108fa8c  # TODO: convert to new param handling
+          commit: harmonize-argparsing
           entrypoint: harmony-r
         parameters:
           - theta: [0.1, 2]
@@ -338,12 +337,12 @@ stages:
     - id: annotations_tsv
       path: '{dataset}_annotations.tsv'
     modules:
-    - id: anno-singler
+    - id: singler
       name: singler annotation
       software_environment: annotate
       repository:
         url: https://github.com/omni-scrna/9-annotate
-        commit: ba5bfcf  # TODO: convert to new param handling
+        commit: harmonize-argparsing  
       parameters:
         - reference: ["HumanPrimaryCellAtlasData", "BlueprintEncodeData"]
 

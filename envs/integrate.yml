@@ -9,6 +9,6 @@ dependencies:
 - r-harmony *
 - bioconductor-rhdf5 *
 - r-data.table *
-- r-optparse *
+- r-argparser *
 - r-magrittr *
 - r-yaml *
