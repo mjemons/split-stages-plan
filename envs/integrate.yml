@@ -10,5 +10,6 @@ dependencies:
 - bioconductor-rhdf5 *
 - r-data.table *
 - r-argparser *
+- r-jsonlite *
 - r-magrittr *
 - r-yaml *
