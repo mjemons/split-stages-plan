@@ -40,9 +40,9 @@ software_environments:
   annotate:
     name: annotate env
     conda: envs/annotate.yml
-  #integrate-py:
-  #  name: Python integration env
-  #  conda: envs/integrate-py.yml
+  integrate-py:
+    name: Python integration env
+    conda: envs/integrate-py.yml
 
 
 stages:
@@ -318,17 +318,16 @@ stages:
         parameters:
           - method: [rpca]
             k_anchor: [5, 20]
-      # TODO rewire scanorama below with new param handling
-      #- id: in-scanorama
-      #name: "Scanorama batch correction"
-      #  software_environment: "integrate-py"
-      #   repository:
-      #    url: https://github.com/omni-scrna/7-integrate-py
-      #    commit: 7bb03ac
-      #    entrypoint: scanorama
-      #  parameters:
-      #    - knn: [20]
-      #      sigma: [15]
+      - id: in-scanorama
+        name: "Scanorama batch correction"
+        software_environment: "integrate-py"
+        repository:
+          url: https://github.com/omni-scrna/7-integrate-py
+          commit: harmonize-argparsing
+          entrypoint: scanorama
+        parameters:
+          - knn: [20]
+            sigma: [15]
 
   - id: ANNO
     inputs:
