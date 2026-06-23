@@ -85,7 +85,7 @@ stages:
       - id: filtered_cellids
         path: "{dataset}_cellids.txt.gz"
     modules:
-      - id: filt-scrapper
+      - id: fi-scrapper
         name: "scrapper-style filtering"
         software_environment: "scrapper"
         repository:
@@ -101,7 +101,7 @@ stages:
       - id: normalized_h5
         path: "{dataset}_normalized.h5"
     modules:
-      - id: norm-scrapper
+      - id: nr-scrapper
         name: "scrapper-based normalization"
         software_environment: "scrapper"
         repository:
@@ -128,7 +128,7 @@ stages:
       - id: normalized_selected_h5
         path: "{dataset}_normalized_selected.h5"
     modules:
-      - id: feat-seurat
+      - id: fe-seurat
         name: "Seurat-based scRNA-seq gene selection methods"
         software_environment: "seurat"
         repository:
@@ -138,7 +138,7 @@ stages:
         parameters:
           - selection_type: ["seurat_vst", "seurat_vst_batch"]
             number_selected: 2000
-      - id: feat-scrapper
+      - id: fe-scrapper
         name: "Scrapper-based gene selection"
         software_environment: "scrapper"
         repository:
@@ -169,7 +169,7 @@ stages:
       - id: loadings_tsv
         path: "{dataset}_loadings.tsv"
     modules:
-      - id: pca-scanpy
+      - id: pc-scanpy
         name: "scanpy PCA"
         software_environment: "scanpy"
         repository:
@@ -180,7 +180,7 @@ stages:
           - solver: [arpack, randomized]
             n_components: 50
             random_seed: 42
-      - id: pca-scrapper
+      - id: pc-scrapper
         name: "scrapper PCA"
         software_environment: "scrapper"
         repository:
@@ -191,7 +191,7 @@ stages:
           - solver: [exact, irlba, random]
             n_components: 50
             random_seed: 42
-      #- id: pca-seurat  # TODO: wire seurat pca methods
+      #- id: pc-seurat  # TODO: wire seurat pca methods
       #    commit: 
 
   - id: EMBED-M
@@ -203,14 +203,14 @@ stages:
         path: "{dataset}_embedding_metrics.json"
     modules:
       # TODO: convert below to new param handling
-      #- id: embed-m-py
+      #- id: em-metrics-py
       #  name: "Embedding quality metrics in python"
       #  software_environment: "metrics"
       #  repository:
       #    url: https://github.com/omni-scrna/metrics
       #    commit: 0d0050e  
       #    entrypoint: embedding-py
-      - id: embed-m-r
+      - id: em-metrics-r
         name: "Embedding quality metrics in R"
         software_environment: "metrics"
         repository:
@@ -225,7 +225,7 @@ stages:
       - id: neighbors_h5
         path: "{dataset}_neighbors.h5"
     modules:
-      - id: nng-scanpy
+      - id: nn-scanpy
         name: "scanpy KNN graph"
         software_environment: "scanpy"
         repository:
@@ -246,7 +246,7 @@ stages:
   #     - id: graph_metrics
   #       path: "{dataset}_graph_metrics.json"
   #   modules:
-  #     - id: graph-m-r
+  #     - id: nn-metrics-r
   #       name: "Graph quality metrics in R"
   #       software_environment: "metrics"
   #       repository:
@@ -261,7 +261,7 @@ stages:
       - id: clusters_tsv
         path: "{dataset}_clusters.tsv"
     modules:
-      - id: clust-scanpy
+      - id: cl-scanpy
         name: "scanpy Leiden clustering"
         software_environment: "scanpy"
         repository:
@@ -280,7 +280,7 @@ stages:
       - id: cluster_metrics
         path: "{dataset}_cluster_metrics.json"
     modules:
-      - id: clust-m-r
+      - id: cl-metrics-r
         name: "Partition metrics in R"
         software_environment: "metrics"
         repository:
@@ -299,7 +299,7 @@ stages:
       - id: corrected_tsv
         path: "{dataset}_corrected.tsv"
     modules:
-      - id: intg8-harmony
+      - id: in-harmony
         name: "Harmony batch correction"
         software_environment: "integrate"
         repository:
@@ -308,7 +308,7 @@ stages:
           entrypoint: harmony-r
         parameters:
           - theta: [0.1, 2]
-      - id: intg8-seurat
+      - id: in-seurat
         name: "Seurat IntegrateLayers batch correction"
         software_environment: "seurat"
         repository:
@@ -319,7 +319,7 @@ stages:
           - method: [rpca]
             k_anchor: [5, 20]
       # TODO rewire scanorama below
-      #- id: intg8-scanorama
+      #- id: in-scanorama
       #name: "Scanorama batch correction"
       #  software_environment: "integrate-py"
       #   repository:
@@ -337,7 +337,7 @@ stages:
     - id: annotations_tsv
       path: '{dataset}_annotations.tsv'
     modules:
-    - id: singler
+    - id: an-singler
       name: singler annotation
       software_environment: annotate
       repository:
