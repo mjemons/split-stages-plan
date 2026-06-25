@@ -250,24 +250,34 @@ stages:
           commit: harmonize-argparsing
           entrypoint: graph-r
 
-  # TODO: update branch and convert scanpy clustering to new param handling
-  #- id: CLUST
-  #  inputs:
-  #    - neighbors_h5
-  #  outputs:
-  #    - id: clusters_tsv
-  #      path: "{dataset}_clusters.tsv"
-  #  modules:
-  #    - id: cl-scanpy
-  #      name: "scanpy Leiden clustering"
-  #      software_environment: "scanpy"
-  #      repository:
-  #        url: https://github.com/omni-scrna/scanpy
-  #        commit: graphs  
-  #        entrypoint: cluster
-  #      parameters:
-  #        - resolution: [0.5, 1.0]
-  #          random_seed: 42
+  - id: CLUST
+    inputs:
+      - neighbors_h5
+    outputs:
+      - id: clusters_tsv
+        path: "{dataset}_clusters.tsv"
+    #modules: TODO: reconnect
+    #  - id: cl-scanpy
+    #    name: "scanpy Leiden clustering"
+    #    software_environment: "scanpy"
+    #    repository:
+    #      url: https://github.com/omni-scrna/scanpy
+    #      commit: graphs  
+    #      entrypoint: cluster
+    #    parameters:
+    #      - resolution: [0.5, 1.0]
+    #        random_seed: 42
+    modules:
+      - id: cl-scanpy
+        name: "scanpy Leiden clustering"
+        software_environment: "scanpy"
+        repository:
+          url: https://github.com/omni-scrna/scanpy
+          commit: graphs  
+          entrypoint: cluster
+        parameters:
+          - resolution: [0.5, 1.0]
+            random_seed: 42
 
   # TODO: update branch and convert clustering metrics R to new param handling
   #- id: CLUST-M
