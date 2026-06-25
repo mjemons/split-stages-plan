@@ -267,17 +267,18 @@ stages:
     #    parameters:
     #      - resolution: [0.5, 1.0]
     #        random_seed: 42
-    modules:
-      - id: cl-scanpy
-        name: "scanpy Leiden clustering"
-        software_environment: "scanpy"
+      - id: cl-seurat
+        name: "Seurat clustering"
+        software_environment: "seurat"
         repository:
-          url: https://github.com/omni-scrna/scanpy
-          commit: graphs  
+          url: https://github.com/omni-scrna/seurat
+          commit: harmonize-argparsing
           entrypoint: cluster
         parameters:
-          - resolution: [0.5, 1.0]
+          - modularity_algorithm: ["louvain_original"]
+            resolution: [0.5, 1.0]
             random_seed: 42
+          #- modularity_algorithm: ["louvain_original", "louvain_multilevel_refinement", "slm", "leiden"]
 
   # TODO: update branch and convert clustering metrics R to new param handling
   #- id: CLUST-M
