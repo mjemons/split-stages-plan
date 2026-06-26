@@ -257,7 +257,6 @@ stages:
       - id: clusters_tsv
         path: "{dataset}_clusters.tsv"
     modules: 
-    # TODO: reconnect scanpy clustering module below
       - id: cl-scanpy
         name: "scanpy Leiden clustering"
         software_environment: "scanpy"
@@ -266,37 +265,39 @@ stages:
           commit: add-flavor
           entrypoint: cluster
         parameters:
-          - resolution: [0.5, 1.0]
-            random_seed: 42
-      - id: cl-seurat
-        name: "Seurat clustering"
-        software_environment: "seurat"
-        repository:
-          url: https://github.com/omni-scrna/seurat
-          commit: ccb7018
-          entrypoint: cluster
-        parameters:
-          - modularity_algorithm: ["louvain_original"]
+          - flavor: ["igraph", "leidenalg"]
             resolution: [0.5, 1.0]
             random_seed: 42
-          #- modularity_algorithm: ["louvain_original", "louvain_multilevel_refinement", "slm", "leiden"]
+      # TODO: reconnect seurat clustering module below
+      #- id: cl-seurat
+      #  name: "Seurat clustering"
+      #  software_environment: "seurat"
+      #  repository:
+      #    url: https://github.com/omni-scrna/seurat
+      #    commit: ccb7018
+      #    entrypoint: cluster
+      #  parameters:
+      #     - modularity_algorithm: ["louvain_original"]
+      #      resolution: [0.5, 1.0]
+      #      random_seed: 42
+      #    #- modularity_algorithm: ["louvain_original", "louvain_multilevel_refinement", "slm", "leiden"]
 
   # TODO: update branch and convert clustering metrics R to new param handling
-  #- id: CLUST-M
-  #  inputs:
-  #    - clusters_tsv
-  #    - rawdata_clusters_truth
-  #  outputs:
-  #    - id: cluster_metrics
-  #      path: "{dataset}_cluster_metrics.json"
-  #  modules:
-  #    - id: cl-metrics-r
-  #      name: "Partition metrics in R"
-  #      software_environment: "metrics"
-  #      repository:
-  #        url: https://github.com/omni-scrna/metrics
-  #        commit: 646f1e4
-  #        entrypoint: cluster-r
+  - id: CLUST-M
+    inputs:
+      - clusters_tsv
+      - rawdata_clusters_truth
+    outputs:
+      - id: cluster_metrics
+        path: "{dataset}_cluster_metrics.json"
+    modules:
+      - id: cl-metrics-r
+        name: "Partition metrics in R"
+        software_environment: "metrics"
+        repository:
+          url: https://github.com/omni-scrna/metrics
+          commit: cleanup-26jun
+          entrypoint: cluster-r
 
   - id: INTG8
     inputs:
@@ -351,7 +352,7 @@ stages:
       software_environment: annotate
       repository:
         url: https://github.com/omni-scrna/9-annotate
-        commit: ba5bfcf
+        commit: harmonize-argparsing
       parameters:
         - reference: ["HumanPrimaryCellAtlasData", "BlueprintEncodeData"]
 
