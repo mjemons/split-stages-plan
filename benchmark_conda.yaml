@@ -296,7 +296,7 @@ stages:
         software_environment: "metrics"
         repository:
           url: https://github.com/omni-scrna/metrics
-          commit: cleanup-26jun
+          commit: harmonize-argparsing
           entrypoint: cluster-r
 
   - id: INTG8
