@@ -45,6 +45,11 @@ jobs:
         with:
           path: out_ci/.snakemake/conda
           key: snakemake-conda-${{ runner.os }}-${{ hashFiles('envs/*.yml', 'envs/*.yaml', 'ci/trim-plan.sh') }}
+          # Partial restore on an exact-key miss: snakemake reuses every
+          # hash-named env that still matches and rebuilds only the changed
+          # one(s), instead of re-solving all modules from scratch.
+          restore-keys: |
+            snakemake-conda-${{ runner.os }}-
 
       # Build the per-module conda envs without running any module. Isolates an
       # env-build OOM from a module OOM, and gives us a cache to save.
