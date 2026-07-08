@@ -388,7 +388,7 @@ stages:
       software_environment: annotate
       repository:
         url: https://github.com/omni-scrna/9-annotate
-        commit: 1cf58ac
+        commit: col_renaming_07_08
       parameters:
         - reference: ["HumanPrimaryCellAtlasData", "BlueprintEncodeData"]
 
@@ -405,5 +405,5 @@ stages:
         software_environment: "metrics"
         repository:
           url: https://github.com/omni-scrna/metrics
-          commit: cb85f4e
+          commit: integration-metrics
           entrypoint: annotation-r
