@@ -288,7 +288,19 @@ stages:
         #    resolution: [0.5, 1.0]
         #    random_seed: 42
         #  #- modularity_algorithm: ["louvain_original", "louvain_multilevel_refinement", "slm", "leiden"]
-
+      - id: cl-scrapper
+        name: "Scrapper clustering"
+        software_environment: "scrapper"
+        repository:
+          url: https://github.com/omni-scrna/scrapper
+          commit: add-clustering
+          entrypoint: cluster
+        parameters:
+          - flavor: ["leiden_modularity", "leiden_cpm", "multilevel", "walktrap"]
+            resolution: [0.5, 1.0]
+            walktrap_steps: [2, 4]
+            random_seed: 42
+        
   - id: CLUST-M
     inputs:
       - clusters_tsv
