@@ -117,6 +117,24 @@ stages:
           entrypoint: normalize
         parameters:
           - flavor: ["log1pCP10k", "analyticalPearsonResiduals"]
+      - id: nr-various-py
+        name: "various scRNA-seq normalization methods"
+        software_environment: "py_conda"
+        repository:
+          url: https://github.com/omni-scrna/nr-various
+          commit: d843f6b
+          entrypoint: normalize-pflog-py
+        parameters:
+          - flavor: ["PFlog"] #, "PFlogScclr"]
+      - id: nr-various-r
+        name: "various scRNA-seq normalization methods"
+        software_environment: "r_conda"
+        repository:
+          url: https://github.com/omni-scrna/nr-various
+          commit: d843f6b
+          entrypoint: "normalize-pflog-r"
+        parameters:
+          - flavor: ["PFlog"]
 
   - id: FEAT
     inputs:
